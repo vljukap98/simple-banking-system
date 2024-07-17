@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: simplebankingsystem
+############################## DB conf ##############################
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;DB_CLOSE_ON_EXIT=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+
+hnb:
+  base-url: https://api.hnb.hr/tecajn-eur/v3
