@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class CurrencyCache {
 
-    private Map<String, HnbRateDto> currencyMap = new HashMap<>();
+    private final Map<String, HnbRateDto> currencyMap = new HashMap<>();
 
     private static CurrencyCache instance;
 
