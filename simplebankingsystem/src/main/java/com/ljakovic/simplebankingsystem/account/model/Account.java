@@ -2,7 +2,16 @@ package com.ljakovic.simplebankingsystem.account.model;
 
 import com.ljakovic.simplebankingsystem.customer.model.Customer;
 import com.ljakovic.simplebankingsystem.transaction.model.Transaction;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,6 +35,9 @@ public class Account implements Serializable {
     private EAccountType accountType;
     @ManyToOne
     private Customer customer;
+    @OneToMany
+    private List<Transaction> transactions;
+
     /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "sender", cascade = CascadeType.ALL)
     private List<Transaction> transactionsOutgoing;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver", cascade = CascadeType.ALL)
@@ -35,13 +47,14 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(Long id, String accountNumber, BigDecimal balance, BigDecimal pastMonthTurnover, EAccountType accountType, Customer customer, List<Transaction> transactionsOutgoing, List<Transaction> transactionsIncoming) {
+    public Account(Long id, String accountNumber, BigDecimal balance, BigDecimal pastMonthTurnover, EAccountType accountType, Customer customer, List<Transaction> transactions) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.pastMonthTurnover = pastMonthTurnover;
         this.accountType = accountType;
         this.customer = customer;
+        this.transactions = transactions;
         //this.transactionsOutgoing = transactionsOutgoing;
         //this.transactionsIncoming = transactionsIncoming;
     }
@@ -92,6 +105,14 @@ public class Account implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     /*public List<Transaction> getTransactionsOutgoing() {

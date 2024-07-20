@@ -23,10 +23,10 @@ public class CustomerService {
 
     public CustomerDto getCustomerDetails(Long customerId) {
         final Customer customer = getCustomer(customerId);
-        return CustomerMapper.mapTo(customer);
+        return CustomerMapper.mapTo(customer, true);
     }
 
-    public CustomerDto createCustomer(CustomerDto customerDto) {
+    public Customer saveCustomer(CustomerDto customerDto) {
         final Customer customer = new Customer();
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
@@ -34,6 +34,12 @@ public class CustomerService {
         customer.setPhoneNumber(customerDto.getPhoneNumber());
 
         customerRepo.save(customer);
+        return customer;
+    }
+
+    public CustomerDto createCustomer(CustomerDto customerDto) {
+        final Customer customer = saveCustomer(customerDto);
         return CustomerMapper.mapTo(customer);
     }
+
 }

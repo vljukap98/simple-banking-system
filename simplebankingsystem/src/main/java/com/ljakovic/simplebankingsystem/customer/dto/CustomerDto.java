@@ -1,6 +1,10 @@
 package com.ljakovic.simplebankingsystem.customer.dto;
 
 
+import com.ljakovic.simplebankingsystem.account.dto.AccountDto;
+
+import java.util.List;
+
 public class CustomerDto {
 
     private Long id;
@@ -9,17 +13,19 @@ public class CustomerDto {
     private String fullName;
     private String email;
     private String phoneNumber;
+    private List<AccountDto> accounts;
 
     public CustomerDto() {
     }
 
-    public CustomerDto(Long id, String firstName, String lastName, String fullName, String email, String phoneNumber) {
+    public CustomerDto(Long id, String firstName, String lastName, String fullName, String email, String phoneNumber, List<AccountDto> accounts) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.accounts = accounts;
     }
 
     public Long getId() {
@@ -68,5 +74,13 @@ public class CustomerDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<AccountDto> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<AccountDto> accounts) {
+        this.accounts = accounts;
     }
 }
