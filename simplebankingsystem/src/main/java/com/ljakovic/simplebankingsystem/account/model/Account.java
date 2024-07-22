@@ -33,6 +33,9 @@ public class Account implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     private EAccountType accountType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_currency")
+    private ECurrency accountCurrency;
     @ManyToOne
     private Customer customer;
     @OneToMany
@@ -47,7 +50,7 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(Long id, String accountNumber, BigDecimal balance, BigDecimal pastMonthTurnover, EAccountType accountType, Customer customer, List<Transaction> transactions) {
+    public Account(Long id, String accountNumber, BigDecimal balance, BigDecimal pastMonthTurnover, EAccountType accountType, Customer customer, List<Transaction> transactions, ECurrency accountCurrency) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
@@ -55,6 +58,7 @@ public class Account implements Serializable {
         this.accountType = accountType;
         this.customer = customer;
         this.transactions = transactions;
+        this.accountCurrency = accountCurrency;
         //this.transactionsOutgoing = transactionsOutgoing;
         //this.transactionsIncoming = transactionsIncoming;
     }
@@ -113,6 +117,14 @@ public class Account implements Serializable {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public ECurrency getAccountCurrency() {
+        return accountCurrency;
+    }
+
+    public void setAccountCurrency(ECurrency accountCurrency) {
+        this.accountCurrency = accountCurrency;
     }
 
     /*public List<Transaction> getTransactionsOutgoing() {

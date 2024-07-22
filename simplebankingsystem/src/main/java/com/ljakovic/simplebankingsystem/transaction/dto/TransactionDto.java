@@ -1,46 +1,33 @@
-package com.ljakovic.simplebankingsystem.transaction.model;
+package com.ljakovic.simplebankingsystem.transaction.dto;
 
-import com.ljakovic.simplebankingsystem.account.model.Account;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ljakovic.simplebankingsystem.account.model.ECurrency;
-import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity
-@Table(name = "transaction")
-public class Transaction implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class TransactionDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "amount")
     private BigDecimal amount;
-    @Column(name = "message")
     private String message;
-    @Column(name = "currency")
     private ECurrency currency;
-    @Column(name = "created_at")
     private Date createdAt;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "sender_id")
-    private Account sender;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "receiver_id")
-    private Account receiver;
+    private Long senderId;
+    private Long receiverId;
 
-    public Transaction() {
+    public TransactionDto() {
     }
 
-    public Transaction(Long id, BigDecimal amount, String message, ECurrency currency, Date createdAt, Account sender, Account receiver) {
+    public TransactionDto(Long id, BigDecimal amount, String message, ECurrency currency, Date createdAt, Long senderId, Long receiverId) {
         this.id = id;
         this.amount = amount;
         this.message = message;
         this.currency = currency;
         this.createdAt = createdAt;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 
     public Long getId() {
@@ -83,19 +70,19 @@ public class Transaction implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Account getSender() {
-        return sender;
+    public Long getSenderId() {
+        return senderId;
     }
 
-    public void setSender(Account sender) {
-        this.sender = sender;
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
-    public Account getReceiver() {
-        return receiver;
+    public Long getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiver(Account receiver) {
-        this.receiver = receiver;
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
     }
 }

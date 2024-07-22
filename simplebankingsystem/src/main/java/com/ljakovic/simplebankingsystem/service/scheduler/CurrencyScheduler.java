@@ -31,7 +31,7 @@ public class CurrencyScheduler {
         LOG.info("Finished currency-scheduler");
     }
 
-    private void getCurrencies() {
+    public void getCurrencies() {
         final CurrencyCache cache = CurrencyCache.getInstance();
         final List<HnbRateDto> hnbRatesDtoList = Arrays.stream(hnbClient.getRates()).toList();
         hnbRatesDtoList.forEach(rate -> cache.getCurrencyMap().put(rate.getCurrency(), rate));

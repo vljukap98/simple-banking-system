@@ -3,6 +3,7 @@ package com.ljakovic.simplebankingsystem.account.service;
 import com.ljakovic.simplebankingsystem.account.dto.AccountDto;
 import com.ljakovic.simplebankingsystem.account.mapper.AccountMapper;
 import com.ljakovic.simplebankingsystem.account.model.Account;
+import com.ljakovic.simplebankingsystem.account.model.ECurrency;
 import com.ljakovic.simplebankingsystem.account.repo.AccountRepository;
 import com.ljakovic.simplebankingsystem.customer.model.Customer;
 import com.ljakovic.simplebankingsystem.customer.repo.CustomerRepository;
@@ -30,6 +31,8 @@ public class AccountService {
         final Account account = new Account();
         account.setAccountNumber(accountDto.getAccountNumber());
         account.setAccountType(accountDto.getAccountType());
+        account.setAccountCurrency(ECurrency.EUR);
+
         if (accountDto.getBalance() != null) {
             account.setBalance(accountDto.getBalance());
         } else {

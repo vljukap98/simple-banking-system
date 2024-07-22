@@ -26,6 +26,7 @@ public class AccountMapper {
         accountDto.setAccountType(account.getAccountType());
         accountDto.setBalance(account.getBalance());
         accountDto.setCustomerId(account.getCustomer().getId());
+        accountDto.setAccountCurrency(account.getAccountCurrency());
 
         if (account.getPastMonthTurnover() != null) {
             accountDto.setPastMonthTurnover(account.getPastMonthTurnover());
