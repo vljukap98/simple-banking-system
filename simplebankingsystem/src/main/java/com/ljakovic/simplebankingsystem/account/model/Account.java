@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,29 +39,25 @@ public class Account implements Serializable {
     private ECurrency accountCurrency;
     @ManyToOne
     private Customer customer;
-    @OneToMany
-    private List<Transaction> transactions;
+    @OneToMany(mappedBy = "sender")
+    private List<Transaction> transactionsOutgoing = new ArrayList<>();
 
-    /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "sender", cascade = CascadeType.ALL)
-    private List<Transaction> transactionsOutgoing;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver", cascade = CascadeType.ALL)
-
-    private List<Transaction> transactionsIncoming;*/
-
+    @OneToMany(mappedBy = "receiver")
+    private List<Transaction> transactionsIncoming = new ArrayList<>();
     public Account() {
     }
 
-    public Account(Long id, String accountNumber, BigDecimal balance, BigDecimal pastMonthTurnover, EAccountType accountType, Customer customer, List<Transaction> transactions, ECurrency accountCurrency) {
+    public Account(Long id, String accountNumber, BigDecimal balance, BigDecimal pastMonthTurnover, EAccountType accountType, Customer customer, ECurrency accountCurrency, List<Transaction> transactionsOutgoing, List<Transaction> transactionsIncoming) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.pastMonthTurnover = pastMonthTurnover;
         this.accountType = accountType;
         this.customer = customer;
-        this.transactions = transactions;
+        //this.transactions = transactions;
         this.accountCurrency = accountCurrency;
-        //this.transactionsOutgoing = transactionsOutgoing;
-        //this.transactionsIncoming = transactionsIncoming;
+        this.transactionsOutgoing = transactionsOutgoing;
+        this.transactionsIncoming = transactionsIncoming;
     }
 
     public Long getId() {
@@ -111,14 +108,6 @@ public class Account implements Serializable {
         this.customer = customer;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
     public ECurrency getAccountCurrency() {
         return accountCurrency;
     }
@@ -127,7 +116,7 @@ public class Account implements Serializable {
         this.accountCurrency = accountCurrency;
     }
 
-    /*public List<Transaction> getTransactionsOutgoing() {
+    public List<Transaction> getTransactionsOutgoing() {
         return transactionsOutgoing;
     }
 
@@ -141,5 +130,5 @@ public class Account implements Serializable {
 
     public void setTransactionsIncoming(List<Transaction> transactionsIncoming) {
         this.transactionsIncoming = transactionsIncoming;
-    }*/
+    }
 }

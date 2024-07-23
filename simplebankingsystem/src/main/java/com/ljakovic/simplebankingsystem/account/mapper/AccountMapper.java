@@ -10,12 +10,12 @@ public class AccountMapper {
     public static AccountDto mapTo(Account account, boolean mapTransactions) {
         final AccountDto accountDto = mapTo(account);
 
-        if (mapTransactions &&
+        /*if (mapTransactions &&
                 account.getTransactions() != null &&
                 !account.getTransactions().isEmpty()
         ) {
             //TODO: map transactions
-        }
+        }*/
         return accountDto;
     }
 
