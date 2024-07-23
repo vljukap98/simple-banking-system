@@ -16,11 +16,12 @@ public class TransactionDto {
     private Date createdAt;
     private Long senderId;
     private Long receiverId;
+    private ETransactionType transactionType;
 
     public TransactionDto() {
     }
 
-    public TransactionDto(Long id, BigDecimal amount, String message, ECurrency currency, Date createdAt, Long senderId, Long receiverId) {
+    public TransactionDto(Long id, BigDecimal amount, String message, ECurrency currency, Date createdAt, Long senderId, Long receiverId, ETransactionType transactionType) {
         this.id = id;
         this.amount = amount;
         this.message = message;
@@ -28,6 +29,7 @@ public class TransactionDto {
         this.createdAt = createdAt;
         this.senderId = senderId;
         this.receiverId = receiverId;
+        this.transactionType = transactionType;
     }
 
     public Long getId() {
@@ -84,5 +86,13 @@ public class TransactionDto {
 
     public void setReceiverId(Long receiverId) {
         this.receiverId = receiverId;
+    }
+
+    public ETransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(ETransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 }

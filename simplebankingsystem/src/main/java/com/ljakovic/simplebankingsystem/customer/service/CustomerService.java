@@ -1,11 +1,19 @@
 package com.ljakovic.simplebankingsystem.customer.service;
 
+import com.ljakovic.simplebankingsystem.account.model.Account;
 import com.ljakovic.simplebankingsystem.customer.dto.CustomerDto;
 import com.ljakovic.simplebankingsystem.customer.mapper.CustomerMapper;
 import com.ljakovic.simplebankingsystem.customer.model.Customer;
 import com.ljakovic.simplebankingsystem.customer.repo.CustomerRepository;
+import com.ljakovic.simplebankingsystem.transaction.dto.ETransactionType;
+import com.ljakovic.simplebankingsystem.transaction.dto.TransactionDto;
+import com.ljakovic.simplebankingsystem.transaction.mapper.TransactionMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 public class CustomerService {
@@ -42,4 +50,15 @@ public class CustomerService {
         return CustomerMapper.mapTo(customer);
     }
 
+    public List<TransactionDto> getCustomerTransactionHistory(Long customerId) {
+        final Customer customer = getCustomer(customerId);
+        return customer.getAccounts().stream()
+                .flatMap(a -> Stream.concat(
+                    a.getTransactionsIncoming().stream()
+                            .map(t -> TransactionMapper.mapTo(t, true, ETransactionType.INCOMING)),
+                    a.getTransactionsOutgoing().stream()
+                            .map(t -> TransactionMapper.mapTo(t, true, ETransactionType.OUTGOING))
+                ))
+                .toList();
+    }
 }

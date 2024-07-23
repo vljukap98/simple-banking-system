@@ -80,7 +80,7 @@ public class TransactionService {
 
         transactionRepo.save(transaction);
 
-        return TransactionMapper.mapTo(transaction, false);
+        return TransactionMapper.mapTo(transaction, false, null);
     }
 
     private BigDecimal calcualte(final BigDecimal amount, final String rate) {
