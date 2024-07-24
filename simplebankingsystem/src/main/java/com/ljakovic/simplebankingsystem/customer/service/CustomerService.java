@@ -10,6 +10,7 @@ import com.ljakovic.simplebankingsystem.transaction.dto.TransactionDto;
 import com.ljakovic.simplebankingsystem.transaction.mapper.TransactionMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -60,5 +61,10 @@ public class CustomerService {
                             .map(t -> TransactionMapper.mapTo(t, true, ETransactionType.OUTGOING))
                 ))
                 .toList();
+    }
+
+    @Transactional
+    public Customer saveCustomer(Long id) {
+        return customerRepo.save(new Customer(id));
     }
 }

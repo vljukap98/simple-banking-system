@@ -24,4 +24,12 @@ public enum ECurrency {
      public String toString() {
          return this.value;
      }
+     public static ECurrency get(String currency) {
+          for(ECurrency eCurrency : ECurrency.values()) {
+               if (eCurrency.toString().equals(currency)) {
+                    return eCurrency;
+               }
+          }
+          return null;
+     }
 }

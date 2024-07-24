@@ -95,4 +95,18 @@ public class TransactionDto {
     public void setTransactionType(ETransactionType transactionType) {
         this.transactionType = transactionType;
     }
+
+    @Override
+    public String toString() {
+        return "TransactionDto{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", message='" + message + '\'' +
+                ", currency=" + currency +
+                ", createdAt=" + createdAt +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
+                ", transactionType=" + transactionType +
+                '}';
+    }
 }

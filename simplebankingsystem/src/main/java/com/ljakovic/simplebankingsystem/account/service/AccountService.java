@@ -7,21 +7,28 @@ import com.ljakovic.simplebankingsystem.account.model.ECurrency;
 import com.ljakovic.simplebankingsystem.account.repo.AccountRepository;
 import com.ljakovic.simplebankingsystem.customer.model.Customer;
 import com.ljakovic.simplebankingsystem.customer.repo.CustomerRepository;
+import com.ljakovic.simplebankingsystem.customer.service.CustomerService;
+import com.ljakovic.simplebankingsystem.service.dataimport.dto.ImportDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepo;
     private final CustomerRepository customerRepo;
+    private final CustomerService customerService;
 
+    private final Object lock = new Object();
 
-    public AccountService(AccountRepository accountRepo, CustomerRepository customerRepo) {
+    public AccountService(AccountRepository accountRepo, CustomerRepository customerRepo, CustomerService customerService) {
         this.accountRepo = accountRepo;
         this.customerRepo = customerRepo;
+        this.customerService = customerService;
     }
 
     public AccountDto createAccount(AccountDto accountDto) {
@@ -46,5 +53,30 @@ public class AccountService {
         customerRepo.save(customer);
 
         return AccountMapper.mapTo(account, true);
+    }
+
+    @Transactional
+    public Account findOrCreateAccount(Long accountId, Long customerId) {
+        synchronized (lock) {
+            Optional<Account> existingAccount = accountRepo.findById(accountId);
+            if (existingAccount.isPresent()) {
+                return existingAccount.get();
+            } else {
+                Customer customer = customerRepo.findById(customerId)
+                        .orElseGet(() -> createCustomer(customerId));
+                Account account = new Account();
+                account.setCustomer(customer);
+                account.setBalance(BigDecimal.ZERO);
+                account.setId(accountId);
+                return accountRepo.save(account);
+            }
+        }
+    }
+
+    @Transactional
+    public Customer createCustomer(Long customerId) {
+        Customer customer = new Customer();
+        customer.setId(customerId); // Manually set customer ID if provided
+        return customerRepo.save(customer);
     }
 }

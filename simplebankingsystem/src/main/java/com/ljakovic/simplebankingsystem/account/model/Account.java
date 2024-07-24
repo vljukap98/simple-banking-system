@@ -54,7 +54,6 @@ public class Account implements Serializable {
         this.pastMonthTurnover = pastMonthTurnover;
         this.accountType = accountType;
         this.customer = customer;
-        //this.transactions = transactions;
         this.accountCurrency = accountCurrency;
         this.transactionsOutgoing = transactionsOutgoing;
         this.transactionsIncoming = transactionsIncoming;
@@ -130,5 +129,20 @@ public class Account implements Serializable {
 
     public void setTransactionsIncoming(List<Transaction> transactionsIncoming) {
         this.transactionsIncoming = transactionsIncoming;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", balance=" + balance +
+                ", pastMonthTurnover=" + pastMonthTurnover +
+                ", accountType=" + accountType +
+                ", accountCurrency=" + accountCurrency +
+                ", customer=" + customer +
+                ", transactionsOutgoing=" + transactionsOutgoing +
+                ", transactionsIncoming=" + transactionsIncoming +
+                '}';
     }
 }

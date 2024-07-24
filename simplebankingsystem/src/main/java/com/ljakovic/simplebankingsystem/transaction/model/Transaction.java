@@ -98,4 +98,17 @@ public class Transaction implements Serializable {
     public void setReceiver(Account receiver) {
         this.receiver = receiver;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", message='" + message + '\'' +
+                ", currency=" + currency +
+                ", createdAt=" + createdAt +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
+                '}';
+    }
 }
