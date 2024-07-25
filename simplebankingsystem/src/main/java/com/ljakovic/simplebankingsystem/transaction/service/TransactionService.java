@@ -22,20 +22,15 @@ public class TransactionService {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionService.class);
 
     private final AccountRepository accountRepo;
-    private final AccountService accountService;
-    private final CustomerRepository customerRepo;
     private final CurrencyScheduler currencyScheduler;
     private final TransactionProcessor transactionProcessor;
 
-    public TransactionService(AccountRepository accountRepo, AccountService accountService, CustomerRepository customerRepo, CurrencyScheduler currencyScheduler, TransactionProcessor transactionProcessor) {
+    public TransactionService(AccountRepository accountRepo, CurrencyScheduler currencyScheduler, TransactionProcessor transactionProcessor) {
         this.accountRepo = accountRepo;
-        this.accountService = accountService;
-        this.customerRepo = customerRepo;
         this.currencyScheduler = currencyScheduler;
         this.transactionProcessor = transactionProcessor;
     }
 
-    @Transactional
     public TransactionDto processTransaction(TransactionDto transactionDto) {
         final Account sender = accountRepo.findById(transactionDto.getSenderId())
                 .orElseThrow(() -> new EntityNotFoundException("Sender account not found"));
@@ -46,25 +41,21 @@ public class TransactionService {
             currencyScheduler.getCurrencies();
         }
 
-        final Transaction transaction = transactionProcessor.processTransaction(transactionDto, sender, receiver);
+        final Transaction transaction = transactionProcessor.processTransaction(transactionDto);
 
         return TransactionMapper.mapTo(transaction, false, null);
     }
 
-    @Transactional
-    public void importTransaction(ImportDto importDto, Account sender, Account receiver) {
-        LOG.info("Sender customer | {}", sender.getId());
-        LOG.info("Receiver customer | {}", receiver.getId());
-
+    public void importTransaction(ImportDto importDto) {
         final TransactionDto transactionDto = new TransactionDto();
-        transactionDto.setSenderId(sender.getId());
-        transactionDto.setReceiverId(receiver.getId());
+        transactionDto.setSenderId(importDto.getSenderAccountId());
+        transactionDto.setReceiverId(importDto.getReceiverAccountId());
         transactionDto.setAmount(importDto.getAmount());
         transactionDto.setCurrency(importDto.getCurrency());
         transactionDto.setCreatedAt(importDto.getCreatedAt());
         transactionDto.setMessage(importDto.getMessage());
 
-        final Transaction transaction = transactionProcessor.processTransaction(transactionDto, sender, receiver);
+        final Transaction transaction = transactionProcessor.processTransaction(transactionDto);
         LOG.info("{}", transaction);
     }
 }

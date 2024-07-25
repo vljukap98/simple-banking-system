@@ -2,11 +2,13 @@ package com.ljakovic.simplebankingsystem.transaction.service;
 
 import com.ljakovic.simplebankingsystem.account.model.Account;
 import com.ljakovic.simplebankingsystem.account.model.ECurrency;
+import com.ljakovic.simplebankingsystem.account.repo.AccountRepository;
 import com.ljakovic.simplebankingsystem.cache.CurrencyCache;
 import com.ljakovic.simplebankingsystem.hnb.dto.HnbRateDto;
 import com.ljakovic.simplebankingsystem.transaction.dto.TransactionDto;
 import com.ljakovic.simplebankingsystem.transaction.model.Transaction;
 import com.ljakovic.simplebankingsystem.transaction.repo.TransactionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,13 +23,15 @@ public class TransactionProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionProcessor.class);
 
     private final TransactionRepository transactionRepo;
+    private final AccountRepository accountRepo;
 
-    public TransactionProcessor(TransactionRepository transactionRepo) {
+    public TransactionProcessor(TransactionRepository transactionRepo, AccountRepository accountRepo) {
         this.transactionRepo = transactionRepo;
+        this.accountRepo = accountRepo;
     }
 
     @Transactional
-    public Transaction processTransaction(TransactionDto transactionDto, Account sender, Account receiver) {
+    public Transaction processTransaction(TransactionDto transactionDto) {
         final Transaction transaction = new Transaction();
         transaction.setAmount(transactionDto.getAmount());
         transaction.setCurrency(transactionDto.getCurrency());
@@ -55,6 +59,11 @@ public class TransactionProcessor {
         final BigDecimal senderCurrencyAmount = calcualte(targetCurrencyAmount, buyingRate);
         final BigDecimal receiverCurrencyAmount = calcualte(targetCurrencyAmount, sellingRate);
 
+        final Account sender = accountRepo.findById(transactionDto.getSenderId())
+                .orElseThrow(() -> new EntityNotFoundException("Sender account not found"));
+        final Account receiver = accountRepo.findById(transactionDto.getReceiverId())
+                .orElseThrow(() -> new EntityNotFoundException("Receiver account not found"));
+
         final BigDecimal senderBalance = sender.getBalance();
         final BigDecimal receiverBalance = receiver.getBalance();
 
@@ -64,7 +73,20 @@ public class TransactionProcessor {
         transaction.setSender(sender);
         transaction.setReceiver(receiver);
 
-        return transactionRepo.save(transaction);
+        try {
+            transactionRepo.save(transaction);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+
+        sender.getTransactionsOutgoing().add(transaction);
+        receiver.getTransactionsIncoming().add(transaction);
+
+        accountRepo.save(sender);
+        accountRepo.save(receiver);
+
+
+        return transaction;
     }
 
     private BigDecimal calcualte(final BigDecimal amount, final String rate) {

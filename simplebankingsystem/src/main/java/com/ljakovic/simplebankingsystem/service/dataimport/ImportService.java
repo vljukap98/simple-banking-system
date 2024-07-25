@@ -9,6 +9,7 @@ import com.opencsv.CSVReader;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -32,21 +34,23 @@ public class ImportService {
     private final TransactionService transactionService;
     private final AccountService accountService;
 
+    @Value("${import-location}")
+    private String importFileLocation;
+
     public ImportService(TransactionService transactionService, AccountService accountService) {
         this.transactionService = transactionService;
         this.accountService = accountService;
     }
 
-    @PostConstruct
     public void importData() {
-        String csvFilePath = System.getProperty("import.csv");
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        try (CSVReader reader = new CSVReader(new FileReader("C:\\Users\\PC\\Desktop\\simple-banking-system\\simplebankingsystem\\transactions.csv"))) {
+        try (CSVReader reader = new CSVReader(new FileReader(importFileLocation))) {
             String[] line;
             int count = 0;
             List<String[]> batch = new ArrayList<>();
             while ((line = reader.readNext()) != null) {
+                LOG.info("Parsed line: {}", Arrays.toString(line));
                 batch.add(line);
                 if (++count % BATCH_SIZE == 0) {
                     executorService.submit(new ImportTask(batch));
@@ -64,11 +68,13 @@ public class ImportService {
     }
 
     class ImportTask implements Runnable{
-        private List<String[]> batch;
+
+        private final List<String[]> batch;
 
         public ImportTask(List<String[]> batch) {
             this.batch = batch;
         }
+
         @Override
         public void run() {
             batch.forEach(line -> {
@@ -91,10 +97,10 @@ public class ImportService {
                 importDto.setCreatedAt(transactionDate);
                 importDto.setMessage(message);
 
-                final Account sender = accountService.findOrCreateAccount(importDto.getSenderAccountId(), importDto.getSenderCustomerId());
-                final Account receiver = accountService.findOrCreateAccount(importDto.getReceiverAccountId(), importDto.getReceiverCustomerId());
+                accountService.findOrCreateAccount(importDto.getSenderAccountId(), importDto.getSenderCustomerId());
+                accountService.findOrCreateAccount(importDto.getReceiverAccountId(), importDto.getReceiverCustomerId());
 
-                transactionService.importTransaction(importDto, sender, receiver);
+                transactionService.importTransaction(importDto);
             });
         }
     }

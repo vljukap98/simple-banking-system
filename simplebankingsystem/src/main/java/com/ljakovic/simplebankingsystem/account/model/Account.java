@@ -141,8 +141,6 @@ public class Account implements Serializable {
                 ", accountType=" + accountType +
                 ", accountCurrency=" + accountCurrency +
                 ", customer=" + customer +
-                ", transactionsOutgoing=" + transactionsOutgoing +
-                ", transactionsIncoming=" + transactionsIncoming +
                 '}';
     }
 }

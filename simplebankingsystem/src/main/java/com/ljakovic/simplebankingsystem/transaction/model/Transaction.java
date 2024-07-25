@@ -23,10 +23,10 @@ public class Transaction implements Serializable {
     private ECurrency currency;
     @Column(name = "created_at")
     private Date createdAt;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "sender_id")
     private Account sender;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receiver_id")
     private Account receiver;
 

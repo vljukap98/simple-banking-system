@@ -55,28 +55,24 @@ public class AccountService {
         return AccountMapper.mapTo(account, true);
     }
 
-    @Transactional
     public Account findOrCreateAccount(Long accountId, Long customerId) {
-        synchronized (lock) {
-            Optional<Account> existingAccount = accountRepo.findById(accountId);
-            if (existingAccount.isPresent()) {
-                return existingAccount.get();
-            } else {
-                Customer customer = customerRepo.findById(customerId)
-                        .orElseGet(() -> createCustomer(customerId));
-                Account account = new Account();
-                account.setCustomer(customer);
-                account.setBalance(BigDecimal.ZERO);
-                account.setId(accountId);
-                return accountRepo.save(account);
-            }
+        Optional<Account> existingAccount = accountRepo.findById(accountId);
+        if (existingAccount.isPresent()) {
+            return existingAccount.get();
+        } else {
+            Customer customer = customerRepo.findById(customerId)
+                    .orElseGet(() -> createCustomer(customerId));
+            Account account = new Account();
+            account.setCustomer(customer);
+            account.setBalance(BigDecimal.ZERO);
+            account.setId(accountId);
+            return accountRepo.save(account);
         }
     }
 
-    @Transactional
     public Customer createCustomer(Long customerId) {
         Customer customer = new Customer();
-        customer.setId(customerId); // Manually set customer ID if provided
+        customer.setId(customerId);
         return customerRepo.save(customer);
     }
 }
