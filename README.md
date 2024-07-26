@@ -54,7 +54,7 @@
 * ### <u>2.3 Transaction history endpoint: </u>
     ```
     /customer/history/{id}
-    ```
+    ``` 
 ​
   * #### API Input:
     This API endpoint takes the customer ID and optionally filter name and value as input, for example:
@@ -67,6 +67,7 @@
 ​
   * #### Workflow:
     When this API is called, search the database for customer transactions and return them as a list.
+> Available endpoints can be imported into postman using exported .json collection located in ./postman_collection
 ​
 ---
 ​

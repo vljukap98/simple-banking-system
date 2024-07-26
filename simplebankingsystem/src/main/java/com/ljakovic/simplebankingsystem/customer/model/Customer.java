@@ -18,7 +18,7 @@ public class Customer implements Serializable {
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "email")
-    private String email;
+    private String email = "example@mail.com";
     @Column(name = "phone_number")
     private String phoneNumber;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)

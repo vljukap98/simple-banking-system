@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "837446b3-3b33-46ab-bb6b-a7f261088250",
+		"name": "simplebankingsystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14590658"
+	},
+	"item": [
+		{
+			"name": "New customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"email\":\"test\",\r\n    \"phoneNumber\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get customer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"email\":\"test\",\r\n    \"phoneNumber\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/customer/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"customer",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get customer transaction history",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"email\":\"test\",\r\n    \"phoneNumber\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/customer/history/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"customer",
+						"history",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create banking account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountNumber\": \"HR1234567891234567892\",\r\n    \"accountType\": \"SAVINGS\",\r\n    \"customerId\": 1,\r\n    \"balance\": 5000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/account/new",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"account",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\":500,\n    \"currency\":\"EUR\",\n    \"senderId\":1,\n    \"receiverId\":2\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/transaction/process",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"transaction",
+						"process"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import transactions",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\":500,\n    \"currency\":\"EUR\",\n    \"senderId\":1,\n    \"receiverId\":2\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/transaction/import",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"transaction",
+						"import"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

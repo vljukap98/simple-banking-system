@@ -51,7 +51,7 @@ public class MailService {
         message.setText("Transaction was just processed on your account\n" +
                 "Your balance was lowered for" + transaction.getAmount() + " " + transaction.getCurrency().toString() + "\n" +
                 "Your new balance: " + transaction.getSender().getBalance());
-        LOGGER.info("Mail sent to: {}", email);
+        message.setTo(email);
         return message;
     }
 
@@ -62,7 +62,7 @@ public class MailService {
         message.setText("Transaction was just processed on your account\n" +
                 "Your balance was increased for" + transaction.getAmount() + " " + transaction.getCurrency().toString() + "\n" +
                 "Your new balance: " + transaction.getReceiver().getBalance());
-        LOGGER.info("Mail sent to: {}", email);
+        message.setTo(email);
         return message;
     }
 }

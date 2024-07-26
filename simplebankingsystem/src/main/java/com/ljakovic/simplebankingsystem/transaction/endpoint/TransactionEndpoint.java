@@ -25,10 +25,4 @@ public class TransactionEndpoint {
     public ResponseEntity<TransactionDto> processTransaction(@RequestBody TransactionDto transactionDto) {
         return ResponseEntity.ok(transactionService.processTransaction(transactionDto));
     }
-
-    @PostMapping("/import")
-    public ResponseEntity<?> importTransactions() {
-        importService.importData();
-        return ResponseEntity.ok().build();
-    }
 }

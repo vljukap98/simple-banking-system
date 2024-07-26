@@ -42,6 +42,7 @@ public class ImportService {
         this.accountService = accountService;
     }
 
+    @PostConstruct
     public void importData() {
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
