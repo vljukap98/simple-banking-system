@@ -5,6 +5,7 @@ import com.ljakovic.simplebankingsystem.account.model.ECurrency;
 import com.ljakovic.simplebankingsystem.account.repo.AccountRepository;
 import com.ljakovic.simplebankingsystem.cache.CurrencyCache;
 import com.ljakovic.simplebankingsystem.hnb.dto.HnbRateDto;
+import com.ljakovic.simplebankingsystem.service.mail.MailService;
 import com.ljakovic.simplebankingsystem.transaction.dto.TransactionDto;
 import com.ljakovic.simplebankingsystem.transaction.model.Transaction;
 import com.ljakovic.simplebankingsystem.transaction.repo.TransactionRepository;
@@ -24,10 +25,12 @@ public class TransactionProcessor {
 
     private final TransactionRepository transactionRepo;
     private final AccountRepository accountRepo;
+    private final MailService mailService;
 
-    public TransactionProcessor(TransactionRepository transactionRepo, AccountRepository accountRepo) {
+    public TransactionProcessor(TransactionRepository transactionRepo, AccountRepository accountRepo, MailService mailService) {
         this.transactionRepo = transactionRepo;
         this.accountRepo = accountRepo;
+        this.mailService = mailService;
     }
 
     @Transactional
@@ -85,6 +88,7 @@ public class TransactionProcessor {
         accountRepo.save(sender);
         accountRepo.save(receiver);
 
+        mailService.sendMail(transaction);
 
         return transaction;
     }

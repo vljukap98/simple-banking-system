@@ -11,9 +11,23 @@ spring:
     hibernate:
       ddl-auto: create-drop
     defer-datasource-initialization: true
+  mail:
+    host: localhost
+    port: 25
+    properties:
+      mail:
+        smtp:
+          auth: false
+        starttls:
+          enable: false
 
 hnb:
   base-url: https://api.hnb.hr/tecajn-eur/v3
 
 #absolute-path to csv
 import-location: /home/ljakovic/Projects/simple-banking-system/simplebankingsystem/transactions.csv
+
+# Mail
+mailing:
+  default-sender: noreply@app.com
+  enabled: false
